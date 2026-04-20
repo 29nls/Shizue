@@ -9,6 +9,8 @@ const config = require('./config');
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./middleware/logger');
 const cacheMiddleware = require('./middleware/cache');
+const mobileDetect = require('./middleware/mobileDetect');
+const languageDetect = require('./middleware/languageDetect');
 
 // Import routes
 const indexRoutes = require('./routes/index');
@@ -50,6 +52,12 @@ app.use(express.json());
 
 // Custom logger
 app.use(logger);
+
+// Mobile detection middleware (redirects /m/ for mobile users)
+app.use(mobileDetect);
+
+// Language detection middleware (handles multi-language routing)
+app.use(languageDetect);
 
 // Routes
 app.use('/', indexRoutes);

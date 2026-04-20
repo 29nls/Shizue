@@ -3,6 +3,14 @@
 <script src="<%= config.site.root %>js/plugin.js"></script>
 <script src="<%= config.site.root %>js/diaspora.js"></script>
 
+<!-- Genshin UI Enhancements -->
+<script src="<%= config.site.root %>js/genshin-ui.js"></script>
+
+<!-- Modern Homepage Features (if enabled) -->
+<% if (pageTitle && pageTitle.includes('Home')) { %>
+<script src="<%= config.site.root %>js/modern-home.js"></script>
+<% } %>
+
 <!-- Hitokoto Random Quote API -->
 <% if (config.features && config.features.hitokoto) { %>
 <script>
