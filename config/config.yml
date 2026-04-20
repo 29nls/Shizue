@@ -1,0 +1,89 @@
+# Site Configuration
+title: My Blog
+subtitle: A beautiful blog about life and tech
+description: Welcome to my personal blog
+author: Author Name
+language: en
+timezone: Asia/Shanghai
+
+# URL Configuration
+url: http://localhost:3000
+root: /
+
+# Menu Items
+menu:
+  首页: /
+  分类: /categories
+  标签: /tags
+  归档: /archives
+  关于: /about
+
+# Social Links
+links:
+  facebook: 
+  twitter: 
+  github: 
+  email: 
+
+# Welcome Cover Image
+welcome_cover: /img/welcome-cover.jpg
+
+# Cover Images (random selection)
+covers:
+  - /img/cover1.jpg
+  - /img/cover2.jpg
+  - /img/cover3.jpg
+
+# Audio Player Config
+autoplay: false
+mp3: []
+  # - http://link1.mp3
+  # - http://link2.mp3
+
+# Feature Flags
+local_search:
+  enable: false
+
+hitokoto: true
+
+mathjax: false
+
+scrollbar: true
+
+# Favicon
+favicon: /img/favicon.png
+
+# RSS
+rss: /feed.xml
+
+# Keywords (SEO)
+keywords: blog, life, tech
+
+# Google Analytics
+google_analytics: 
+
+# Beian (Chinese ICP License Info)
+beian:
+  enable: false
+  enableFooter: false
+  beianInfo: 
+  link: http://www.beian.miit.gov.cn
+
+# Gitalk Comments
+gitalk:
+  enable: false
+  clientID: ''
+  clientSecret: ''
+  repo: ''
+  owner: ''
+  admin: []
+
+# Twitter Card
+twitterpic:
+  enable: false
+  src: 
+  creatorid: 
+
+# Pagination
+pagination:
+  postsPerPage: 10

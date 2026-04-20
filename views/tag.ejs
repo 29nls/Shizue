@@ -1,0 +1,45 @@
+<div id="primary">
+  <h1 class="page-title">标签: <%= tag %></h1>
+  
+  <% if (posts && posts.length > 0) { %>
+    <% posts.forEach((post, index) => { %>
+      <div class="post" data-index="<%= index %>">
+        <a href="<%= config.site.root %>post/<%= post.slug %>" class="pview" style="background-image: url(<%= post.cover %>);">
+          <img src="<%= post.cover %>" alt="<%= post.title %>" />
+        </a>
+        
+        <div class="else">
+          <p><%= helpers.formatDate(post.date, 'MMMM Do, YYYY') %></p>
+          <h3><a href="<%= config.site.root %>post/<%= post.slug %>" class="pview"><%= post.title %></a></h3>
+          <p><%= post.excerpt %></p>
+          
+          <div class="here">
+            <% if (post.categories && post.categories.length > 0) { %>
+              <span class="icon-folder"></span>
+              <% post.categories.forEach((cat, i) => { %>
+                <a href="<%= config.site.root %>category/<%= cat %>"><%= cat %></a><% if (i < post.categories.length - 1) { %>, <% } %>
+              <% }); %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>此标签下暂无文章</p>
+  <% } %>
+  
+  <!-- Pagination -->
+  <% if (totalPages > 1) { %>
+    <div id="pager">
+      <% if (hasPrev) { %>
+        <a href="<%= config.site.root %>tag/<%= tag %>?page=<%= prevPage %>" class="pview">← PREV</a>
+      <% } %>
+      
+      <span style="margin: 0 20px; color: #999;">Page <%= currentPage %> / <%= totalPages %></span>
+      
+      <% if (hasNext) { %>
+        <a href="<%= config.site.root %>tag/<%= tag %>?page=<%= nextPage %>" class="pview">NEXT →</a>
+      <% } %>
+    </div>
+  <% } %>
+</div>

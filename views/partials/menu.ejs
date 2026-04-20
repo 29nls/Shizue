@@ -1,0 +1,9 @@
+<ul class="menu">
+  <li><a href="<%= config.site.root %>"><%= config.site.title %></a></li>
+  <% if (config.menu && Object.entries(config.menu).length > 0) { %>
+    <% Object.entries(config.menu).forEach(([name, url]) => { %>
+      <li><a href="<%= url.startsWith('http') ? url : (config.site.root + url.replace(/^\//, '')) %>" class="pview"><%= name %></a></li>
+    <% }); %>
+  <% } %>
+  <li><a href="<%= config.site.root %>archive/" class="pview">归档</a></li>
+</ul>

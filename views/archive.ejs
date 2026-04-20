@@ -1,0 +1,30 @@
+<div id="single">
+  <div id="primary">
+    <h1 class="page-title">归档</h1>
+    
+    <% if (archives && archives.length > 0) { %>
+      <div id="archives">
+        <% archives.forEach(archive => { %>
+          <h3 class="al_year"><%= archive.year %> 年</h3>
+          <ul class="al_mon_list">
+            <% if (archive.posts && archive.posts.length > 0) { %>
+              <li>
+                <span class="al_mon"><%= archive.month %> 月 <em>(<%= archive.posts.length %> 篇文章)</em></span>
+                <ul class="al_post_list">
+                  <% archive.posts.forEach(p => { %>
+                    <li>
+                      <%= p.date.getDate() %>日: 
+                      <a href="<%= config.site.root %>post/<%= p.slug %>" class="pview">
+                        <%= p.title %>
+                      </a>
+                    </li>
+                  <% }); %>
+                </ul>
+              </li>
+            <% } %>
+          </ul>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+<div id="single">
+  <% if (post) { %>
+    
+    <!-- Top Bar -->
+    <div id="top">
+      <div class="bar"></div>
+      <a class="image-icon" href="javascript:history.back()"></a>
+      <div title="播放/暂停" class="icon-play" data-id="<%= post.slug %>"></div>
+      <% if (post.galleries && post.galleries.length > 0) { %>
+        <div title="查看壁纸" class="icon-images"></div>
+      <% } %>
+      <h3 class="subtitle"><%= post.title %></h3>
+      
+      <div class="social">
+        <div class="like-icon">
+          <span class="icon-like"></span>
+        </div><!--
+     --><div>
+          <%- include('partials/social') %>
+        </div>
+      </div>
+      <div class="scrollbar"></div>
+    </div>
+
+    <!-- Post Section -->
+    <div class="section">
+      
+      <!-- Gallery Images (if available) -->
+      <% if (post.galleries && post.galleries.length > 0) { %>
+        <div class="images">
+          <div id="jg">
+            <% post.galleries.forEach(img => { %>
+              <a class="zoom icon-zoom" target="_blank" href="<%= img %>">
+                <img width="300" src="<%= img %>" alt="gallery"/>
+              </a>
+            <% }); %>
+          </div>
+          <a target="_blank" class="downloadlink">壁纸下载</a>
+        </div>
+      <% } %>
+      
+      <!-- Article Content -->
+      <div class="article">
+        <div>
+          <h1 class="title"><%= post.title %></h1>
+          
+          <!-- Post Meta -->
+          <div class="stuff">
+            <span><%= helpers.formatDate(post.date, 'MMMM Do, YYYY') %></span>
+            <% if (post.categories && post.categories.length > 0) { %>
+              <span>
+                分类 
+                <% post.categories.forEach((cat, i) => { %>
+                  <a href="<%= config.site.root %>category/<%= cat %>"><%= cat %></a><% if (i < post.categories.length - 1) { %>, <% } %>
+                <% }); %>
+              </span>
+            <% } %>
+            <% if (post.tags && post.tags.length > 0) { %>
+              <span>
+                标签 
+                <% post.tags.forEach((tag, i) => { %>
+                  <a href="<%= config.site.root %>tag/<%= tag %>"><%= tag %></a><% if (i < post.tags.length - 1) { %>, <% } %>
+                <% }); %>
+              </span>
+            <% } %>
+          </div>
+
+          <!-- Audio Player -->
+          <% if (post.mp3) { %>
+            <div style="margin: 20px 0; padding: 20px; background: #f5f5f5; border-radius: 4px;">
+              <audio controls <% if (post.autoplay) { %>autoplay<% } %> style="width: 100%;">
+                <source src="<%= post.mp3 %>" type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          <% } %>
+
+          <!-- Post Content -->
+          <div class="content">
+            <%- post.content %>
+          </div>
+
+          <!-- Comments -->
+          <div class="comment-wrap">
+            <%- include('partials/gitalk') %>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Related Posts -->
+    <% if (relatedPosts && relatedPosts.length > 0) { %>
+      <div class="relate">
+        <h3>相关推荐</h3>
+        <ul>
+          <% relatedPosts.forEach(p => { %>
+            <li>
+              <a href="<%= config.site.root %>post/<%= p.slug %>" class="pview">
+                <%= p.title %>
+              </a>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+  <% } %>
+</div>

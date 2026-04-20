@@ -1,0 +1,36 @@
+<!-- jQuery and Plugins -->
+<script src="<%= config.site.root %>js/jquery.min.js"></script>
+<script src="<%= config.site.root %>js/plugin.js"></script>
+<script src="<%= config.site.root %>js/diaspora.js"></script>
+
+<!-- Hitokoto Random Quote API -->
+<% if (config.features && config.features.hitokoto) { %>
+<script>
+fetch('https://v1.hitokoto.cn')
+  .then(response => response.json())
+  .then(data => {
+    const subtitle = document.querySelector('#post0 p:first-child');
+    if (subtitle) {
+      subtitle.textContent = data.hitokoto;
+    }
+  })
+  .catch(err => console.log('Hitokoto API error:', err));
+</script>
+<% } %>
+
+<!-- Google Analytics -->
+<% if (config.services && config.services.googleAnalytics) { %>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', '<%= config.services.googleAnalytics %>', 'auto');
+ga('send', 'pageview');
+</script>
+<% } %>
+
+<script>
+document.documentElement.classList.remove('loading');
+document.body.classList.remove('loading');
+</script>
