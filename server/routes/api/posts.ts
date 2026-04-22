@@ -1,9 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import yaml from 'yaml'
-import MarkdownIt from 'markdown-it'
-
-const md = new MarkdownIt()
 
 interface Post {
   slug: string
@@ -19,21 +16,17 @@ interface Post {
 
 // Get posts data directory
 function getPostsDir(): string {
-  // Try different possible paths
   const possiblePaths = [
     path.join(process.cwd(), 'data', 'posts'),
     path.join(process.cwd(), 'public', 'posts'),
     path.join(process.cwd(), 'posts'),
   ]
-
-  // Return first path (will exist after migration)
   return possiblePaths[0]
 }
 
 // Parse markdown file with frontmatter
 function parsePost(content: string, slug: string): Post | null {
   try {
-    // Split frontmatter from content
     const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/
     const match = content.match(frontmatterRegex)
 
@@ -41,12 +34,7 @@ function parsePost(content: string, slug: string): Post | null {
 
     const frontmatterText = match[1]
     const markdownContent = match[2]
-
-    // Parse YAML frontmatter
     const frontmatter = yaml.parse(frontmatterText)
-
-    // Convert markdown to HTML
-    const htmlContent = md.render(markdownContent)
 
     return {
       slug,
@@ -56,7 +44,7 @@ function parsePost(content: string, slug: string): Post | null {
       categories: frontmatter.categories || [],
       tags: frontmatter.tags || [],
       excerpt: frontmatter.excerpt || markdownContent.substring(0, 200),
-      content: htmlContent,
+      content: markdownContent,
       cover: frontmatter.cover || '/images/default-cover.jpg',
     }
   } catch (error) {
@@ -69,10 +57,7 @@ export default defineEventHandler(async (event) => {
   const postsDir = getPostsDir()
 
   try {
-    // Check if directory exists
     await fs.access(postsDir)
-
-    // Read all markdown files
     const files = await fs.readdir(postsDir)
     const mdFiles = files.filter(f => f.endsWith('.md'))
 
@@ -89,9 +74,7 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    // Sort by date descending
     posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
     return posts
   } catch (error) {
     console.error('Error loading posts:', error)

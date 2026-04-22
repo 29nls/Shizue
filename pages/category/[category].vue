@@ -10,15 +10,15 @@
 
       <h1 class="category-title">{{ category }}</h1>
       <p class="category-description">
-        {{ posts.length }} {{ posts.length === 1 ? 'article' : 'articles' }} in this category
+        {{ categoryPosts.length }} {{ categoryPosts.length === 1 ? 'article' : 'articles' }} in this category
       </p>
     </header>
 
     <!-- Posts Grid -->
-    <div v-if="posts.length > 0" class="posts-container">
+    <div v-if="categoryPosts.length > 0" class="posts-container">
       <div class="posts-grid">
         <div
-          v-for="(post, index) in posts"
+          v-for="(post, index) in categoryPosts"
           :key="index"
           class="post-card scroll-fade"
         >
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePostFetching } from '~/composables/usePostFetching'
 
@@ -143,12 +143,8 @@ useHead({
   ],
 })
 
-// Expose posts for template
+// Computed for posts
 const posts_ = computed(() => categoryPosts.value)
-</script>
-
-<script setup lang="ts">
-import { computed } from 'vue'
 </script>
 
 <style scoped>

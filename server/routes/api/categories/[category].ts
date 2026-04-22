@@ -1,9 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import yaml from 'yaml'
-import MarkdownIt from 'markdown-it'
-
-const md = new MarkdownIt()
 
 interface Post {
   slug: string
@@ -36,7 +33,6 @@ function parsePost(content: string, slug: string): Post | null {
     const frontmatterText = match[1]
     const markdownContent = match[2]
     const frontmatter = yaml.parse(frontmatterText)
-    const htmlContent = md.render(markdownContent)
 
     return {
       slug,
@@ -46,7 +42,7 @@ function parsePost(content: string, slug: string): Post | null {
       categories: frontmatter.categories || [],
       tags: frontmatter.tags || [],
       excerpt: frontmatter.excerpt || markdownContent.substring(0, 200),
-      content: htmlContent,
+      content: markdownContent,
       cover: frontmatter.cover || '/images/default-cover.jpg',
     }
   } catch (error) {

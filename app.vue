@@ -1,7 +1,9 @@
 <template>
   <div class="app-container">
-    <!-- Genshin Loader -->
-    <GenshinLoader />
+    <!-- Genshin Loader - Client only -->
+    <ClientOnly>
+      <GenshinLoader />
+    </ClientOnly>
 
     <!-- Main Layout -->
     <NuxtLayout>
