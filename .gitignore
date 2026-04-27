@@ -29,3 +29,30 @@ logs/
 *.sqlite
 *.sqlite3
 .turbo
+
+# ==================== PHASE 3: DATABASE ====================
+# SQLite database files (local development)
+dev.db
+dev.db-journal
+
+# Environment files with secrets
+.env
+.env.local
+.env.production.local
+
+# Prisma
+prisma/.env
+.prisma/
+migrations/
+
+# Database backups
+*.sql
+*.sql.gz
+database-backup/
+
+# Uploaded files and temporary uploads
+public/uploads/
+uploads/
+tmp/
+temp/
+
