@@ -136,6 +136,9 @@
         </NuxtLink>
       </div>
     </section>
+
+    <!-- Newsletter Section -->
+    <NewsletterSignup :animate="true" />
   </div>
 </template>
 

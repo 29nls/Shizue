@@ -98,19 +98,24 @@
         </NuxtLink>
       </nav>
 
+      <!-- Comments Section -->
+      <CommentsSection :post-slug="post.slug" />
+
       <!-- Related Posts -->
       <section v-if="relatedPosts.length > 0" class="related-posts">
-        <div class="related-posts-header">
+        <div class="related-posts-header" data-aos="fade-up">
           <h2>Related Posts</h2>
           <p>You might also like</p>
         </div>
 
         <div class="related-posts-grid">
           <NuxtLink
-            v-for="relatedPost in relatedPosts.slice(0, 3)"
+            v-for="(relatedPost, index) in relatedPosts"
             :key="relatedPost.slug"
             :to="`/post/${relatedPost.slug}`"
             class="related-post-card"
+            :data-aos="`fade-up`"
+            :data-aos-delay="`${index * 100}`"
           >
             <div class="related-post-image">
               <img :src="relatedPost.cover" :alt="relatedPost.title" />
@@ -183,19 +188,25 @@ const nextPost = computed(() => {
   return posts.value?.[currentIndex + 1] || null
 })
 
-// Get related posts (by category or tag)
-const relatedPosts = computed(() => {
-  if (!post.value) return []
+// Get related posts from API (improved algorithm)
+const relatedPosts = ref<any[]>([])
 
-  return (posts.value || [])
-    .filter(p => p.slug !== post.value?.slug)
-    .filter(p => {
-      const sameCat = p.categories.some(c => post.value?.categories.includes(c))
-      const sameTag = p.tags.some(t => post.value?.tags.includes(t))
-      return sameCat || sameTag
+const fetchRelatedPosts = async () => {
+  if (!post.value) return
+
+  try {
+    const response = await $fetch('/api/related-posts', {
+      query: {
+        slug: post.value.slug,
+        limit: 3
+      }
     })
-    .slice(0, 6)
-})
+    relatedPosts.value = response.relatedPosts || []
+  } catch (error) {
+    console.error('Error fetching related posts:', error)
+    relatedPosts.value = []
+  }
+}
 
 // Load post
 const loadPost = async () => {
@@ -218,6 +229,7 @@ const loadPost = async () => {
     if (foundPost) {
       post.value = foundPost
       error.value = null
+      await fetchRelatedPosts()
     } else {
       error.value = `Post "${slug}" not found`
     }
@@ -233,6 +245,7 @@ const loadPost = async () => {
 watch(() => route.params.slug, () => {
   loading.value = true
   post.value = null
+  relatedPosts.value = []
   loadPost()
 })
 
