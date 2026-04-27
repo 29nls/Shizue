@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -17,8 +17,8 @@ model Post {
   excerpt     String?
   slug        String    @unique
   content     String    // Markdown or HTML
-  categories  String[]  // Array of category names
-  tags        String[]  // Array of tags
+  categories  String    @default("")  // Comma-separated or JSON string
+  tags        String    @default("")  // Comma-separated or JSON string
   author      String    @default("Admin")
   coverImage  String?   // URL to featured image
   published   Boolean   @default(false)
