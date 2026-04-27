@@ -13,6 +13,10 @@
 </template>
 
 <script setup lang="ts">
+import { useScrollAnimation } from '~/composables/useScrollAnimation'
+import { useLanguageDetection } from '~/composables/useLanguageDetection'
+import { useMobileDetection } from '~/composables/useMobileDetection'
+
 // App initialization
 useHead({
   htmlAttrs: {
@@ -21,16 +25,43 @@ useHead({
   bodyAttrs: {
     class: 'genshin-body',
   },
+  script: [
+    {
+      async: true,
+      src: 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX', // Replace with your GA4 ID
+      // @ts-ignore
+      onload() {
+        window.dataLayer = window.dataLayer || []
+        function gtag() {
+          // @ts-ignore
+          window.dataLayer.push(arguments)
+        }
+        gtag('js', new Date())
+        gtag('config', 'G-XXXXXXXXXX') // Replace with your GA4 ID
+      }
+    }
+  ]
 })
 
-// Composables
-import { useLanguageDetection } from '~/composables/useLanguageDetection'
-import { useMobileDetection } from '~/composables/useMobileDetection'
+// Initialize scroll animations
+const { initializeAOS, refreshAOS } = useScrollAnimation()
 
-// Initialize detections
+const route = useRoute()
+
+// Initialize detections and animations
 if (process.client) {
   useLanguageDetection()
   useMobileDetection()
+  
+  onMounted(() => {
+    initializeAOS()
+  })
+  
+  watch(() => route.path, () => {
+    nextTick(() => {
+      refreshAOS()
+    })
+  })
 }
 </script>
 

@@ -23,7 +23,7 @@
 
     <!-- Featured Carousel -->
     <section v-if="posts.length > 0" class="featured-section" id="featured">
-      <div class="section-title scroll-fade">
+      <div class="section-title" data-aos="fade-up">
         <h2>Featured Posts</h2>
         <p>Latest and most popular stories</p>
       </div>
@@ -33,7 +33,9 @@
           <div
             v-for="(post, index) in posts.slice(0, 6)"
             :key="index"
-            class="carousel-item scroll-fade"
+            class="carousel-item"
+            :data-aos="`fade-up`"
+            :data-aos-delay="`${index * 100}`"
           >
             <div class="carousel-item-image">
               <img :src="post.cover" :alt="post.title" />
@@ -60,7 +62,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats-section scroll-fade">
+    <section class="stats-section" data-aos="fade-up">
       <div class="stats-container">
         <div class="stat-item">
           <span class="stat-number">{{ posts.length }}</span>
@@ -79,7 +81,7 @@
 
     <!-- Posts Grid -->
     <section class="posts-grid-section" id="posts">
-      <div class="section-title scroll-fade">
+      <div class="section-title" data-aos="fade-up">
         <h2>All Posts</h2>
         <p>Explore our complete collection</p>
       </div>
@@ -88,7 +90,9 @@
         <div
           v-for="(post, index) in posts"
           :key="index"
-          class="post-card scroll-fade"
+          class="post-card"
+          :data-aos="`fade-up`"
+          :data-aos-delay="`${(index % 6) * 100}`"
         >
           <div class="post-card-image">
             <img :src="post.cover" :alt="post.title" />
@@ -111,7 +115,7 @@
 
     <!-- Categories Section -->
     <section v-if="categories.length > 0" class="categories-section" id="categories">
-      <div class="section-title scroll-fade">
+      <div class="section-title" data-aos="fade-up">
         <h2>Browse by Category</h2>
         <p>Find content that interests you</p>
       </div>
@@ -121,7 +125,8 @@
           v-for="category in categories.slice(0, 8)"
           :key="category"
           :to="`/category/${category}`"
-          class="category-card scroll-fade"
+          class="category-card"
+          data-aos="zoom-in"
         >
           <div class="category-icon">📁</div>
           <div class="category-name">{{ category }}</div>

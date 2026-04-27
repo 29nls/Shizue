@@ -130,6 +130,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePostFetching } from '~/composables/usePostFetching'
+import { generateArticleSchema, generateBreadcrumbSchema } from '~/utils/seo'
 
 interface Post {
   slug: string
@@ -240,13 +241,89 @@ onMounted(() => {
   loadPost()
 })
 
-// Head
+// Head and SEO
 useHead({
   title: () => post.value ? `${post.value.title} | Blog` : 'Post | Blog',
   meta: [
     {
       name: 'description',
       content: () => post.value?.excerpt || 'Read this article',
+    },
+    // Open Graph
+    {
+      property: 'og:type',
+      content: 'article',
+    },
+    {
+      property: 'og:title',
+      content: () => post.value?.title || 'Blog Post',
+    },
+    {
+      property: 'og:description',
+      content: () => post.value?.excerpt || 'Read this article',
+    },
+    {
+      property: 'og:image',
+      content: () => post.value?.cover || '/default-og-image.jpg',
+    },
+    // Twitter Card
+    {
+      name: 'twitter:card',
+      content: 'summary_large_image',
+    },
+    {
+      name: 'twitter:title',
+      content: () => post.value?.title || 'Blog Post',
+    },
+    {
+      name: 'twitter:description',
+      content: () => post.value?.excerpt || 'Read this article',
+    },
+    {
+      name: 'twitter:image',
+      content: () => post.value?.cover || '/default-og-image.jpg',
+    },
+    // Article meta
+    {
+      name: 'article:published_time',
+      content: () => post.value?.date || new Date().toISOString(),
+    },
+    {
+      name: 'article:author',
+      content: () => post.value?.author || 'Author',
+    },
+    {
+      name: 'article:section',
+      content: () => post.value?.categories[0] || 'Blog',
+    },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: () =>
+        post.value
+          ? JSON.stringify(
+              generateArticleSchema(
+                post.value as any,
+                typeof window !== 'undefined' ? window.location.origin : 'https://example.com'
+              )
+            )
+          : '{}',
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: () =>
+        post.value
+          ? JSON.stringify(
+              generateBreadcrumbSchema(
+                [
+                  { name: 'Home', url: '/' },
+                  { name: post.value.title, url: `/post/${post.value.slug}` },
+                ],
+                typeof window !== 'undefined' ? window.location.origin : 'https://example.com'
+              )
+            )
+          : '{}',
     },
   ],
 })

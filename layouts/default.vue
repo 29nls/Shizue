@@ -8,6 +8,7 @@
         </NuxtLink>
         <nav class="nav">
           <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/search">Search</NuxtLink>
           <NuxtLink to="/archive">Archive</NuxtLink>
           <a href="#" @click.prevent="toggleLanguageMenu">{{ currentLanguage.toUpperCase() }}</a>
           <div v-if="showLanguageMenu" class="language-menu">
