@@ -41,23 +41,22 @@
 
         <!-- Cover Image -->
         <div class="form-group">
-          <label for="coverImage">Cover Image URL</label>
-          <input
-            id="coverImage"
-            v-model="form.coverImage"
-            type="url"
-            placeholder="https://example.com/image.jpg"
-            class="form-input"
-          />
+          <label>Cover Image</label>
+          <ImageUploader @image-uploaded="handleCoverImageUpload" />
           <small v-if="form.coverImage" class="preview">
-            <img :src="form.coverImage" alt="Preview" />
+            <img :src="form.coverImage" alt="Cover Preview" />
           </small>
         </div>
 
         <!-- Content (TipTap Editor) -->
         <div class="form-group">
           <label>Post Content *</label>
-          <TipTapEditor v-model="form.content" />
+          <div class="editor-section">
+            <div class="editor-toolbar-custom">
+              <ImageUploader @image-uploaded="handleContentImageUpload" />
+            </div>
+            <TipTapEditor v-model="form.content" />
+          </div>
         </div>
 
         <!-- Categories -->
@@ -218,6 +217,17 @@ const handleCategoriesChange = () => {
 
 const handleTagsChange = () => {
   updateTags()
+}
+
+// Image upload handlers
+const handleCoverImageUpload = (image: any) => {
+  form.value.coverImage = image.url
+}
+
+const handleContentImageUpload = (image: any) => {
+  // Insert image markdown into content
+  const imageMarkdown = `\n![${image.filename}](${image.url})\n`
+  form.value.content += imageMarkdown
 }
 
 // Submit form
@@ -386,6 +396,23 @@ textarea.form-input {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
+}
+
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.editor-toolbar-custom {
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
 }
 
 .tag {

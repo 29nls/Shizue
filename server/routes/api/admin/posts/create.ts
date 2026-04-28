@@ -1,62 +1,92 @@
-import { promises as fs } from 'fs'
-import path from 'path'
-import yaml from 'yaml'
+import { defineEventHandler, readBody, createError } from 'h3'
+import { PrismaClient } from '@prisma/client'
+import slugify from 'slugify'
+
+const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
-  const method = event.req.method
-
-  if (method !== 'POST') {
-    return { error: 'Method not allowed' }
-  }
-
   try {
+    // Check authentication
+    const auth = event.node.req.headers.authorization
+    if (!auth) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Unauthorized',
+      })
+    }
+
+    const token = auth.replace('Bearer ', '')
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+
+    if (token !== adminPassword) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Invalid authentication token',
+      })
+    }
+
+    // Read request body
     const body = await readBody(event)
-    const { title, excerpt, content, categories, tags, author, cover } = body
 
-    if (!title || !content) {
-      return { error: 'Title and content required' }
+    // Validate required fields
+    if (!body.title || !body.content) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Title and content are required',
+      })
     }
 
-    // Generate slug from title
-    const slug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
+    // Generate slug
+    const slug = slugify(body.title, {
+      lower: true,
+      strict: true,
+    }) + '-' + Date.now().toString().slice(-6)
 
-    // Check if post already exists
-    const postsDir = path.join(process.cwd(), 'data', 'posts')
-    const filePath = path.join(postsDir, `${slug}.md`)
+    // Check if slug already exists
+    const existingPost = await prisma.post.findUnique({
+      where: { slug },
+    })
 
-    try {
-      await fs.access(filePath)
-      return { error: 'Post with this title already exists' }
-    } catch {
-      // File doesn't exist, continue
+    if (existingPost) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'A post with this slug already exists',
+      })
     }
 
-    const frontmatter = {
-      title,
-      excerpt,
-      categories: categories || [],
-      tags: tags || [],
-      author: author || 'Anonymous',
-      cover: cover || '/default-post-cover.jpg',
-      date: new Date().toISOString()
-    }
+    // Create post
+    const post = await prisma.post.create({
+      data: {
+        title: body.title,
+        excerpt: body.excerpt || body.content.substring(0, 150).replace(/<[^>]*>/g, ''),
+        slug,
+        content: body.content,
+        categories: body.categories ? JSON.stringify(body.categories) : '[]',
+        tags: body.tags ? JSON.stringify(body.tags) : '[]',
+        author: body.author || 'Admin',
+        coverImage: body.coverImage || null,
+        published: body.published || false,
+        publishedAt: body.published ? new Date() : null,
+      },
+    })
 
-    const fileContent = `---\n${yaml.stringify(frontmatter)}---\n${content}`
-
-    await fs.writeFile(filePath, fileContent, 'utf-8')
-
+    // Return success response
     return {
       success: true,
       message: 'Post created successfully',
-      slug
+      slug: post.slug,
+      post,
     }
   } catch (error) {
     console.error('Error creating post:', error)
-    return { error: 'Failed to create post' }
+
+    if (error instanceof Error && 'statusCode' in error) {
+      throw error
+    }
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to create post',
+    })
   }
 })
