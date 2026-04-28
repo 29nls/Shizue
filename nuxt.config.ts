@@ -28,7 +28,7 @@ export default defineNuxtConfig({
 
   // Build configuration
   build: {
-    transpile: ['markdown-it', 'slugify', 'aos', '@prisma/client'],
+    transpile: ['markdown-it', 'slugify', 'aos'],
   },
 
   // Runtime config
