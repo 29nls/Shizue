@@ -16,6 +16,9 @@
       <NuxtLink to="/admin/posts" class="nav-item">
         📝 Posts
       </NuxtLink>
+      <NuxtLink to="/admin/comments" class="nav-item">
+        💬 Comments
+      </NuxtLink>
       <NuxtLink to="/admin/settings" class="nav-item">
         ⚙️ Settings
       </NuxtLink>
@@ -128,7 +131,7 @@ const loadDashboardData = async () => {
   }
 
   try {
-    const password = atob(authToken)
+    const password = authToken // Already Bearer token
     
     // Fetch posts
     const postsResponse = await $fetch('/api/admin/posts', {
@@ -140,7 +143,29 @@ const loadDashboardData = async () => {
     recentPosts.value = postsResponse.posts || []
     stats.value.totalPosts = postsResponse.count || 0
 
-    // TODO: Fetch comments and subscribers count
+    // Fetch comments with pending filter
+    try {
+      const commentsResponse = await $fetch('/api/admin/comments?status=pending&limit=1', {
+        headers: {
+          'Authorization': `Bearer ${password}`
+        }
+      })
+      stats.value.pendingComments = commentsResponse.stats?.pending || 0
+    } catch (error) {
+      console.error('Error fetching comments:', error)
+    }
+
+    // Fetch subscribers
+    try {
+      const subscribersResponse = await $fetch('/api/admin/subscribers', {
+        headers: {
+          'Authorization': `Bearer ${password}`
+        }
+      })
+      stats.value.subscribers = subscribersResponse.count || 0
+    } catch (error) {
+      console.error('Error fetching subscribers:', error)
+    }
   } catch (error) {
     console.error('Error loading dashboard:', error)
     router.push('/admin/login')
