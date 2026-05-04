@@ -42,6 +42,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+definePageMeta({
+  layout: false,
+})
+
 const router = useRouter()
 const password = ref('')
 const loading = ref(false)

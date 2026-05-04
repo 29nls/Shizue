@@ -153,8 +153,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'nuxt/app'
 
 definePageMeta({
-  middleware: 'auth',
-  layout: 'default',
+  layout: 'admin',
 })
 
 const router = useRouter()

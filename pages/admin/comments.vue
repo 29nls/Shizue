@@ -151,8 +151,7 @@
 import { ref, onMounted } from 'vue'
 
 definePageMeta({
-  middleware: 'auth',
-  layout: 'default',
+  layout: 'admin',
 })
 
 interface Comment {
