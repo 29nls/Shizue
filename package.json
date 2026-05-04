@@ -9,7 +9,6 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
@@ -44,6 +43,10 @@
     "typescript": "^5.3.0"
   },
   "engines": {
-    "node": "^18.0.0"
+    "node": ">=18.0.0"
+  },
+  "overrides": {
+    "@nuxt/schema": "^3.21.4",
+    "unhead": "^1.0.0"
   }
 }
