@@ -48,14 +48,14 @@
           </small>
         </div>
 
-        <!-- Content (TipTap Editor) -->
+        <!-- Content (Markdown) -->
         <div class="form-group">
           <label>Post Content *</label>
           <div class="editor-section">
             <div class="editor-toolbar-custom">
               <ImageUploader @image-uploaded="handleContentImageUpload" />
             </div>
-            <TipTapEditor v-model="form.content" />
+            <textarea v-model="form.content" class="form-input" placeholder="Write your post in Markdown..." style="min-height: 300px"></textarea>
           </div>
         </div>
 

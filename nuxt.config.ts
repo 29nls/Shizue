@@ -63,8 +63,7 @@ export default defineNuxtConfig({
   // Server
   nitro: {
     prerender: {
-      crawlLinks: true,
-      routes: ['/sitemap.xml', '/rss.xml'],
+      crawlLinks: false,
       ignore: ['/admin'],
     },
   },
