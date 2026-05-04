@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   // Metadata
   app: {
@@ -34,8 +35,8 @@ export default defineNuxtConfig({
   // Runtime config
   runtimeConfig: {
     public: {
-      siteTitle: 'Diaspora',
-      siteSubtitle: 'A Genshin-Inspired Blog',
+      siteTitle: 'SHIZUE',
+      siteSubtitle: 'at ur service',
       siteDescription: 'Modern blog with beautiful animations',
       siteKeywords: 'blog, diaspora, modern, animation',
       siteAuthor: 'Your Name',
@@ -66,9 +67,6 @@ export default defineNuxtConfig({
       crawlLinks: true,
       routes: ['/sitemap.xml', '/rss.xml'],
       ignore: ['/admin'],
-    },
-    headers: {
-      'Cache-Control': 'max-age=60',
     },
   },
 

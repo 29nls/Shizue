@@ -32,6 +32,7 @@ interface PostFrontmatter {
   published?: boolean
   publishedAt?: string
   date?: string
+  slug?: string
 }
 
 interface PostFile {
@@ -61,7 +62,7 @@ function parseMarkdownFile(filePath: string): PostFile {
     throw new Error(`No frontmatter found in ${filePath}`)
   }
   
-  const frontmatter = YAML.parse(match[1]) as PostFrontmatter
+  const frontmatter = YAML.parse(match[1]!) as PostFrontmatter
   const markdown = fileContent.replace(frontmatterRegex, '')
   
   // Extract slug from filename (e.g., "my-post.md" → "my-post")
@@ -98,7 +99,7 @@ async function migratePosts() {
     return
   }
   
-  const files = fs.readdirSync(postsDir).filter(f => f.endsWith('.md'))
+  const files = fs.readdirSync(postsDir).filter((f: string) => f.endsWith('.md'))
   
   let created = 0
   for (const file of files) {
@@ -121,8 +122,8 @@ async function migratePosts() {
           excerpt: postData.excerpt,
           slug: postData.slug,
           content: postData.content,
-          categories: postData.categories,
-          tags: postData.tags,
+          categories: postData.categories.join(','),
+          tags: postData.tags.join(','),
           author: postData.author,
           coverImage: postData.coverImage,
           published: postData.published,
@@ -252,7 +253,7 @@ async function createDefaultSettings() {
   
   await prisma.settings.create({
     data: {
-      siteTitle: 'Diaspora',
+      siteTitle: 'SHIZUE',
       siteDescription: 'A beautiful Genshin-inspired blog',
       notifyAdminEmail: process.env.ADMIN_EMAIL,
       notifyOnComment: true,
