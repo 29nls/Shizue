@@ -44,9 +44,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "overrides": {
-    "@nuxt/schema": "^3.21.4",
-    "unhead": "^1.0.0"
   }
 }
