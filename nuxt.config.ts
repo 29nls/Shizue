@@ -23,13 +23,12 @@ export default defineNuxtConfig({
 
   // Modules
   modules: [
-    '@nuxt/content',
     '@vueuse/nuxt',
   ],
 
   // Build configuration
   build: {
-    transpile: ['markdown-it', 'slugify', 'aos'],
+    transpile: ['slugify', 'aos'],
   },
 
   // Runtime config
