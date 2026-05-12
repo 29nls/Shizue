@@ -37,11 +37,11 @@ const categories = [
 const sampleItems = [
   // Senjata
   {
+    categorySlug: 'senjata',
     name: 'Pedang Besi Klasik',
     slug: 'pedang-besi-klasik',
     description: 'Pedang besi berkualitas tinggi dengan desain klasik. Cocok untuk pemula.',
     shortDescription: 'Pedang besi klasik dengan damage baik',
-    categoryName: 'Senjata',
     price: 50000,
     originalPrice: 75000,
     discount: 33,
@@ -63,11 +63,11 @@ const sampleItems = [
     isFeatured: true,
   },
   {
+    categorySlug: 'senjata',
     name: 'Pedang Api Legendaris',
     slug: 'pedang-api-legendaris',
     description: 'Pedang legendaris berselimut api yang dapat menghasilkan damage tambahan. Item langka.',
     shortDescription: 'Pedang legendaris dengan efek api',
-    categoryName: 'Senjata',
     price: 500000,
     originalPrice: 750000,
     discount: 33,
@@ -90,11 +90,11 @@ const sampleItems = [
     isFeatured: true,
   },
   {
+    categorySlug: 'senjata',
     name: 'Busur Perak',
     slug: 'busur-perak',
     description: 'Busur berkualitas tinggi yang presisi dan cepat.',
     shortDescription: 'Busur perak presisi tinggi',
-    categoryName: 'Senjata',
     price: 60000,
     originalPrice: null,
     discount: 0,
@@ -115,11 +115,11 @@ const sampleItems = [
 
   // Armor
   {
+    categorySlug: 'armor',
     name: 'Baju Besi Pemula',
     slug: 'baju-besi-pemula',
     description: 'Baju besi dasar untuk pemula yang ingin meningkatkan pertahanan.',
     shortDescription: 'Baju besi dasar dengan defense 30',
-    categoryName: 'Armor',
     price: 40000,
     originalPrice: 50000,
     discount: 20,
@@ -138,11 +138,11 @@ const sampleItems = [
     isFeatured: false,
   },
   {
+    categorySlug: 'armor',
     name: 'Armor Kristal Suci',
     slug: 'armor-kristal-suci',
     description: 'Armor epik dengan proteksi magis yang kuat. Ideal untuk tank yang menghadapi serangan magic.',
     shortDescription: 'Armor epik dengan magic resistance',
-    categoryName: 'Armor',
     price: 300000,
     originalPrice: 400000,
     discount: 25,
@@ -164,11 +164,11 @@ const sampleItems = [
 
   // Aksesoris
   {
+    categorySlug: 'aksesoris',
     name: 'Cincin Kekuatan',
     slug: 'cincin-kekuatan',
     description: 'Cincin yang meningkatkan kekuatan dan damage output. Essential untuk DPS class.',
     shortDescription: 'Cincin dengan bonus damage +20',
-    categoryName: 'Aksesoris',
     price: 80000,
     originalPrice: 100000,
     discount: 20,
@@ -187,11 +187,11 @@ const sampleItems = [
     isFeatured: false,
   },
   {
+    categorySlug: 'aksesoris',
     name: 'Kalung Kehidupan',
     slug: 'kalung-kehidupan',
     description: 'Kalung yang meningkatkan HP secara signifikan. Wajib dimiliki untuk survival.',
     shortDescription: 'Kalung dengan bonus HP +100',
-    categoryName: 'Aksesoris',
     price: 75000,
     originalPrice: null,
     discount: 0,
@@ -210,11 +210,11 @@ const sampleItems = [
     isFeatured: false,
   },
   {
+    categorySlug: 'aksesoris',
     name: 'Perhiasan Mistis Kosmik',
     slug: 'perhiasan-mistis-kosmik',
     description: 'Perhiasan legendaris yang meningkatkan semua stat secara signifikan. Rarity tertinggi.',
     shortDescription: 'Perhiasan legendaris all-stats+',
-    categoryName: 'Aksesoris',
     price: 1000000,
     originalPrice: 1500000,
     discount: 33,
@@ -236,11 +236,11 @@ const sampleItems = [
 
   // Konsumsi
   {
+    categorySlug: 'konsumsi',
     name: 'Potion Hp Merah',
     slug: 'potion-hp-merah',
     description: 'Potion untuk memulihkan HP sebesar 100. Item consumable yang bisa digunakan berkali-kali.',
     shortDescription: 'Potion restore HP 100',
-    categoryName: 'Konsumsi',
     price: 5000,
     originalPrice: null,
     discount: 0,
@@ -259,11 +259,11 @@ const sampleItems = [
     isFeatured: false,
   },
   {
+    categorySlug: 'konsumsi',
     name: 'Potion Mana Biru',
     slug: 'potion-mana-biru',
     description: 'Potion untuk memulihkan Mana/SP sebesar 150. Essential untuk skill-based class.',
     shortDescription: 'Potion restore Mana 150',
-    categoryName: 'Konsumsi',
     price: 6000,
     originalPrice: null,
     discount: 0,
@@ -282,11 +282,11 @@ const sampleItems = [
     isFeatured: false,
   },
   {
+    categorySlug: 'konsumsi',
     name: 'Buff Damage Emas',
     slug: 'buff-damage-emas',
     description: 'Buff yang meningkatkan damage sebesar 50% selama 30 detik. Cocok untuk farming atau PVP.',
     shortDescription: 'Buff damage +50% selama 30s',
-    categoryName: 'Konsumsi',
     price: 15000,
     originalPrice: 20000,
     discount: 25,
@@ -365,17 +365,18 @@ async function main() {
     console.log('🏠 Creating items...')
     let itemCount = 0
     for (const item of sampleItems) {
-      const category = createdCategories.find(c => c.name === item.categoryName)
+      const category = createdCategories.find(c => c.slug === item.categorySlug)
       if (!category) {
-        console.error(`   ✗ Category not found: ${item.categoryName}`)
+        console.error(`   ✗ Category not found: ${item.categorySlug}`)
         continue
       }
 
+      const { categorySlug, ...itemData } = item
       const createdItem = await prisma.item.upsert({
         where: { slug: item.slug },
         update: {},
         create: {
-          ...item,
+          ...itemData,
           categoryId: category.id,
           rating: 4.5,
           reviewCount: 5,

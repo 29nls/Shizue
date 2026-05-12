@@ -17,7 +17,7 @@ model Item {
   id              String    @id @default(cuid())
   name            String    @unique
   slug            String    @unique
-  description     String    @db.Text
+  description     String
   shortDescription String?
   
   // Pricing & Stock
@@ -34,7 +34,7 @@ model Item {
   tags            String?   // JSON array of tags
   
   // Specifications
-  specs           String?   @db.Text // JSON: {label, value} pairs
+  specs           String?   // JSON: {label, value} pairs
   levelRequirement Int?
   classRequirement String?  // CSV: Warrior,Paladin,Archer
   
@@ -56,7 +56,6 @@ model Item {
   
   // Relations
   reviews         Review[]
-  orderItems      OrderItem[]
   wishlists       Wishlist[]
   
   // Timestamps
@@ -74,7 +73,7 @@ model Category {
   id              String    @id @default(cuid())
   name            String    @unique
   slug            String    @unique
-  description     String?   @db.Text
+  description     String?
   image           String?   // Category icon/image URL
   sortOrder       Int       @default(999)
   isActive        Boolean   @default(true)
@@ -100,7 +99,7 @@ model Review {
   authorEmail     String?
   rating          Int       // 1-5
   title           String?
-  content         String    @db.Text
+  content         String
   imageUrl        String?   // Optional review image
   
   // Engagement
@@ -163,8 +162,8 @@ model Order {
   trackingNumber  String?
   
   // Notes
-  customerNotes   String?   @db.Text
-  adminNotes      String?   @db.Text
+  customerNotes   String?
+  adminNotes      String?
   
   // Timestamps
   createdAt       DateTime  @default(now())
@@ -185,7 +184,7 @@ model OrderItem {
   orderId         String
   order           Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   
-  itemId          String    // Snapshot of item at purchase time
+  itemId          String    // Snapshot of item at purchase time (not a foreign key)
   itemName        String
   itemPrice       Float     // Price at time of purchase
   quantity        Int
@@ -202,7 +201,7 @@ model Post {
   title       String
   excerpt     String?
   slug        String    @unique
-  content     String    @db.Text
+  content     String
   categories  String    @default("")
   tags        String    @default("")
   author      String    @default("Admin")
@@ -217,7 +216,6 @@ model Post {
   
   @@index([slug])
   @@index([published])
-  @@deprecated("Use Item model instead")
 }
 
 // Comment model - DEPRECATED: migrate to Review
@@ -227,7 +225,7 @@ model Comment {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   author    String
   email     String
-  content   String   @db.Text
+  content   String
   approved  Boolean  @default(false)
   isSpam    Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -235,22 +233,21 @@ model Comment {
   
   @@index([postId])
   @@index([approved])
-  @@deprecated("Use Review model for item ratings")
 }
 
 // Subscriber model - DEPRECATED: migrate to NotificationSubscriber
+// Kept for reference during migration process
 model Subscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   verified  Boolean  @default(false)
   active    Boolean  @default(true)
   mailchimpId String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   
   @@index([verified])
   @@index([active])
-  @@deprecated("Use NotificationSubscriber for store notifications")
 }
 
 // NotificationSubscriber model - For restock & order notifications
@@ -293,9 +290,9 @@ model Draft {
   id        String   @id @default(cuid())
   type      String   @default("item") // "post" or "item"
   title     String
-  content   String   @db.Text
+  content   String
   slug      String
-  metadata  String?  @db.Text // JSON: category, price, etc
+  metadata  String?  // JSON: category, price, etc
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -311,7 +308,7 @@ model Analytics {
   itemName        String?
   
   // Context
-  metadata        String?  @db.Text // JSON: search_query, filters, etc
+  metadata        String?  // JSON: search_query, filters, etc
   userEmail       String?
   ipAddress       String?
   userAgent       String?
