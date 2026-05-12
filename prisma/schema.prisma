@@ -109,8 +109,8 @@ model Analytics {
 // Settings model - site configuration
 model Settings {
   id              String   @id @default(cuid())
-  siteTitle       String   @default("Diaspora")
-  siteDescription String   @default("A beautiful Genshin-inspired blog")
+  siteTitle       String   @default("MACENG MARKET")
+  siteDescription String   @default("Toko item Dragon Nest terlengkap dan terpercaya")
   logo            String?  // URL to logo
   favicon         String?  // URL to favicon
   

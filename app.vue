@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <!-- Genshin Loader - Client only -->
+    <!-- MACENG Market Loader - Client only -->
     <ClientOnly>
-      <GenshinLoader />
+      <MACENGLoader />
     </ClientOnly>
 
     <!-- Main Layout -->
@@ -23,7 +23,7 @@ useHead({
     lang: 'en',
   },
   bodyAttrs: {
-    class: 'genshin-body',
+    class: 'maceng-store',
   },
   script: [
     {

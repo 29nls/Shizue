@@ -8,8 +8,10 @@
         </NuxtLink>
         <nav class="nav">
           <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/search">Search</NuxtLink>
-          <NuxtLink to="/archive">Archive</NuxtLink>
+          <NuxtLink to="/catalog">Katalog</NuxtLink>
+          <NuxtLink to="/catalog/equipment">Equipment</NuxtLink>
+          <NuxtLink to="/support/faq">FAQ</NuxtLink>
+          <NuxtLink to="/account/orders">Pesanan Saya</NuxtLink>
           <a href="#" @click.prevent="toggleLanguageMenu">{{ currentLanguage.toUpperCase() }}</a>
           <div v-if="showLanguageMenu" class="language-menu">
             <button
@@ -45,7 +47,7 @@ import { ref, onMounted } from 'vue'
 import { useLanguageDetection } from '~/composables/useLanguageDetection'
 
 const config = useRuntimeConfig()
-const siteTitle = config.public.siteTitle || 'Diaspora'
+const siteTitle = computed(() => config.public.siteTitle || 'MACENG MARKET')
 
 const { SUPPORTED_LANGUAGES, getCurrentLanguage, setLanguage } = useLanguageDetection()
 

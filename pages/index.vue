@@ -1,5 +1,620 @@
 <template>
-  <div class="home-page">
+  <div class="store-home">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Perlengkapan Dragon Nest Terlengkap</h1>
+        <p class="hero-subtitle">Ribuan item siap meningkatkan petualangan Anda</p>
+        <NuxtLink to="/catalog" class="hero-cta">Jelajahi Sekarang</NuxtLink>
+      </div>
+    </section>
+
+    <!-- Promo Banner -->
+    <section class="promo-banner">
+      <div class="promo-card">
+        <span class="promo-icon">⚡</span>
+        <h3>Flash Sale</h3>
+        <p>Diskon hingga 50% untuk item pilihan</p>
+        <NuxtLink to="/catalog?filter=sale" class="promo-link">Lihat Diskon →</NuxtLink>
+      </div>
+      <div class="promo-card">
+        <span class="promo-icon">🆕</span>
+        <h3>Item Baru</h3>
+        <p>Produk terbaru minggu ini</p>
+        <NuxtLink to="/catalog?sort=newest" class="promo-link">Lihat Baru →</NuxtLink>
+      </div>
+      <div class="promo-card">
+        <span class="promo-icon">⭐</span>
+        <h3>Terpercaya</h3>
+        <p>2,150+ pelanggan puas</p>
+        <a href="#reviews" class="promo-link">Lihat Ulasan →</a>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="section-header">
+        <h2>Kategori Utama</h2>
+        <p>Temukan item yang Anda cari</p>
+      </div>
+      <div class="categories-grid">
+        <NuxtLink to="/catalog/equipment" class="category-card">
+          <div class="category-icon">📦</div>
+          <h3>Equipment</h3>
+          <p>150+ item</p>
+        </NuxtLink>
+        <NuxtLink to="/catalog/consumables" class="category-card">
+          <div class="category-icon">🧪</div>
+          <h3>Consumables</h3>
+          <p>200+ item</p>
+        </NuxtLink>
+        <NuxtLink to="/catalog/materials" class="category-card">
+          <div class="category-icon">⚙️</div>
+          <h3>Materials</h3>
+          <p>180+ item</p>
+        </NuxtLink>
+        <NuxtLink to="/catalog/enhancement" class="category-card">
+          <div class="category-icon">✨</div>
+          <h3>Enhancement</h3>
+          <p>120+ item</p>
+        </NuxtLink>
+      </div>
+    </section>
+
+    <!-- Featured Items Section -->
+    <section class="featured-items-section">
+      <div class="section-header">
+        <h2>Item Unggulan</h2>
+        <NuxtLink to="/catalog" class="view-all">Lihat Semua →</NuxtLink>
+      </div>
+      <div class="items-grid">
+        <div v-for="i in 8" :key="i" class="item-card">
+          <div class="item-image">
+            <div class="placeholder-image">
+              <span>Item Image {{ i }}</span>
+            </div>
+            <span v-if="i % 3 === 0" class="sale-badge">-30%</span>
+          </div>
+          <div class="item-content">
+            <h3>Sword of Destiny {{ i }}</h3>
+            <p class="item-category">Equipment • Weapon</p>
+            <p class="item-rating">⭐ 4.5 (128 ulasan)</p>
+            <div class="item-price">
+              <span class="current">Rp 150.000</span>
+              <span v-if="i % 3 === 0" class="original">Rp 200.000</span>
+            </div>
+            <button class="btn-add-cart">+ Keranjang</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us">
+      <div class="section-header">
+        <h2>Mengapa Memilih MACENG MARKET?</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature">
+          <span class="feature-icon">🚚</span>
+          <h4>Pengiriman Cepat</h4>
+          <p>Barang sampai dalam 1-2 hari kerja</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">💰</span>
+          <h4>Harga Terbaik</h4>
+          <p>Harga kompetitif dengan kualitas terjamin</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">🔒</span>
+          <h4>Aman & Terpercaya</h4>
+          <p>Transaksi aman dengan enkripsi tingkat bank</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">💬</span>
+          <h4>Support 24/7</h4>
+          <p>Tim support siap membantu kapan saja</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section" id="reviews">
+      <div class="section-header">
+        <h2>Ulasan Pelanggan</h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <p class="review-rating">⭐⭐⭐⭐⭐</p>
+          <p class="review-text">"Barangnya original dan pengiriman cepat! Sangat puas dengan pelayanan MACENG MARKET."</p>
+          <p class="review-author">- PlayerXXX</p>
+        </div>
+        <div class="review-card">
+          <p class="review-rating">⭐⭐⭐⭐⭐</p>
+          <p class="review-text">"Harga murah, kualitas bagus. Definitely recommend untuk semua Dragon Nest players!"</p>
+          <p class="review-author">- GamerPro</p>
+        </div>
+        <div class="review-card">
+          <p class="review-rating">⭐⭐⭐⭐⭐</p>
+          <p class="review-text">"Customer service yang responsif dan helpful. Suka banget belanja di sini!"</p>
+          <p class="review-author">- BuddyHero</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section (Reused from blog, adapted for store) -->
+    <section class="newsletter-section">
+      <div class="newsletter-content">
+        <h2>Jangan Lewatkan Update Terbaru!</h2>
+        <p>Dapatkan notifikasi untuk item baru dan flash sale</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Masukkan email Anda..." />
+          <button class="btn-subscribe">Subscribe</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const config = useRuntimeConfig()
+const siteTitle = config.public.siteTitle || 'MACENG MARKET'
+const siteSubtitle = config.public.siteSubtitle || 'Dragon Nest Item Store'
+
+// TODO: Replace with actual API calls when backend is ready
+const items = ref([
+  { id: 1, name: 'Sword of Destiny', category: 'Equipment', price: 150000, rating: 4.5 },
+  { id: 2, name: 'Shield of Protection', category: 'Equipment', price: 120000, rating: 4.3 },
+])
+
+</script>
+
+<style scoped>
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 500px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="1200" height="600" fill="url(%23grid)" /></svg>');
+  opacity: 0.3;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 14px 40px;
+  background: white;
+  color: #667eea;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Promo Banner */
+.promo-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+}
+
+.promo-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.promo-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.promo-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.3rem;
+}
+
+.promo-card p {
+  color: #666;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.promo-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.promo-link:hover {
+  color: #764ba2;
+}
+
+/* Section Headers */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h2 {
+  font-size: 2.2rem;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.section-header p {
+  color: #666;
+  margin-top: 0.5rem;
+  width: 100%;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.view-all {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Categories Section */
+.categories-section {
+  padding: 4rem 2rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+}
+
+.category-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.category-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.category-card p {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Featured Items Section */
+.featured-items-section {
+  padding: 4rem 2rem;
+  background: white;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.item-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.item-image {
+  position: relative;
+  height: 150px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4757;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.item-content {
+  padding: 1rem;
+}
+
+.item-content h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.item-category {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+}
+
+.item-rating {
+  color: #f39c12;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.item-price {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  align-items: center;
+}
+
+.item-price .current {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.item-price .original {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.btn-add-cart {
+  width: 100%;
+  padding: 0.75rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-add-cart:hover {
+  background: #764ba2;
+}
+
+/* Why Us Section */
+.why-us {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.feature h4 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.feature p {
+  color: #666;
+  margin: 0;
+}
+
+/* Reviews Section */
+.reviews-section {
+  padding: 4rem 2rem;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.review-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-rating {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+.review-text {
+  color: #333;
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.review-author {
+  color: #666;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.newsletter-content {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.newsletter-content h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+}
+
+.newsletter-content p {
+  margin: 0 0 2rem;
+  opacity: 0.9;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.newsletter-form input::placeholder {
+  color: #999;
+}
+
+.btn-subscribe {
+  padding: 12px 24px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-subscribe:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+  }
+
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+</style>
+
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-background"></div>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showLoader" id="genshin-loader" class="genshin-loader" :class="{ 'loader-hidden': hidden }">
+  <div v-if="showLoader" id="maceng-loader" class="maceng-loader" :class="{ 'loader-hidden': hidden }">
     <div class="loader-particles">
       <div v-for="i in 6" :key="i" class="particle"></div>
     </div>
@@ -19,7 +19,7 @@
     </div>
     <div class="loader-text">
       <h2>{{ siteTitle }}</h2>
-      <p>Loading magical worlds...</p>
+      <p>Memuat toko kami...</p>
     </div>
     <div class="loader-progress">
       <div class="loader-progress-bar"></div>
@@ -29,9 +29,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 
 const config = useRuntimeConfig()
-const siteTitle = config.public.siteTitle || 'Diaspora'
+const siteTitle = computed(() => config.public.siteTitle || 'MACENG MARKET')
 
 const showLoader = ref(true)
 const hidden = ref(false)
@@ -70,7 +71,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#genshin-loader {
+#maceng-loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -84,7 +85,7 @@ onMounted(() => {
   backdrop-filter: blur(10px);
 }
 
-.genshin-loader.loader-hidden {
+.maceng-loader.loader-hidden {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.8s ease-out;

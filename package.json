@@ -1,7 +1,7 @@
 {
-  "name": "diaspora-nuxt-genshin",
-  "version": "2.0.0",
-  "description": "Diaspora blog platform migrated to Nuxt 3 with Genshin-inspired UI",
+  "name": "maceng-market",
+  "version": "1.0.0",
+  "description": "MACENG MARKET - Dragon Nest item store platform",
   "type": "module",
   "private": true,
   "scripts": {
@@ -13,15 +13,18 @@
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
-    "db:seed": "tsx scripts/migrate-json-to-db.ts",
+    "db:seed": "tsx scripts/seed-items.ts",
     "db:reset": "prisma migrate reset"
   },
   "keywords": [
-    "diaspora",
-    "blog",
+    "maceng",
+    "market",
+    "dragon-nest",
+    "store",
+    "item",
     "nuxt",
     "vue",
-    "genshin"
+    "typescript"
   ],
   "author": "",
   "license": "MIT",

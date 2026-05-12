@@ -4,12 +4,12 @@ export default defineNuxtConfig({
   // Metadata
   app: {
     head: {
-      title: 'Diaspora - A Genshin-Inspired Blog',
+      title: 'MACENG MARKET - Dragon Nest Item Store',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Diaspora blog with Genshin Impact design' },
-        { name: 'keywords', content: 'blog, diaspora, genshin, impact' },
+        { name: 'description', content: 'Toko item Dragon Nest terlengkap dan terpercaya' },
+        { name: 'keywords', content: 'dragon nest, item, store, maceng, market' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -34,10 +34,10 @@ export default defineNuxtConfig({
   // Runtime config
   runtimeConfig: {
     public: {
-      siteTitle: 'SHIZUE',
-      siteSubtitle: 'at ur service',
-      siteDescription: 'Modern blog with beautiful animations',
-      siteKeywords: 'blog, diaspora, modern, animation',
+      siteTitle: 'MACENG MARKET',
+      siteSubtitle: 'Dragon Nest Item Store',
+      siteDescription: 'Perlengkapan Dragon Nest terlengkap dan terpercaya',
+      siteKeywords: 'dragon nest, item, store, equipment, consumables',
       siteAuthor: 'Your Name',
       siteLanguage: 'en',
       siteRoot: '/',
@@ -46,9 +46,9 @@ export default defineNuxtConfig({
 
   // CSS
   css: [
-    '~/assets/css/genshin-loader.css',
-    '~/assets/css/genshin-polish.css',
-    '~/assets/css/diaspora.css',
+    '~/assets/css/maceng-loader.css',
+    '~/assets/css/maceng-polish.css',
+    '~/assets/css/maceng-store.css',
     '~/assets/css/global.css',
   ],
 

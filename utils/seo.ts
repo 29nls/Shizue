@@ -1,45 +1,41 @@
-export interface Post {
-  title: string
-  excerpt: string
-  content: string
-  date: string
-  author?: string
-  cover?: string
+export interface Item {
+  id: string
+  name: string
+  description: string
+  price: number
+  originalPrice?: number
+  image: string
   slug: string
-  categories: string[]
-  tags?: string[]
+  category: string
+  rating: number
+  reviewCount: number
 }
 
-export const generateArticleSchema = (post: Post, siteUrl: string) => {
+export const generateProductSchema = (item: Item, siteUrl: string) => {
   return {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
-    ...(post.cover && { image: post.cover }),
-    datePublished: post.date,
-    dateModified: post.date,
-    ...(post.author && {
-      author: {
-        '@type': 'Person',
-        name: post.author
+    '@type': 'Product',
+    name: item.name,
+    description: item.description,
+    image: item.image,
+    ...(item.rating > 0 && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: item.rating,
+        reviewCount: item.reviewCount
       }
     }),
-    publisher: {
-      '@type': 'Organization',
-      name: 'Diaspora',
-      ...(post.cover && {
-        logo: {
-          '@type': 'ImageObject',
-          url: post.cover
-        }
-      })
+    offers: {
+      '@type': 'Offer',
+      url: `${siteUrl}/item/${item.slug}`,
+      priceCurrency: 'IDR',
+      price: item.price.toString(),
+      availability: 'https://schema.org/InStock'
     },
-    url: `${siteUrl}/post/${post.slug}`,
-    ...(post.tags && post.tags.length > 0 && {
-      keywords: post.tags.join(', ')
-    }),
-    articleBody: post.content
+    brand: {
+      '@type': 'Brand',
+      name: 'MACENG MARKET'
+    }
   }
 }
 
