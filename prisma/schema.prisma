@@ -10,39 +10,224 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Post model - stores all blog posts
+// ============ STORE MODELS ============
+
+// Item model - Dragon Nest items for sale
+model Item {
+  id              String    @id @default(cuid())
+  name            String    @unique
+  slug            String    @unique
+  description     String    @db.Text
+  shortDescription String?
+  
+  // Pricing & Stock
+  price           Float
+  originalPrice   Float?    // For displaying discounts
+  discount        Float?    @default(0)  // Discount percentage
+  stock           Int       @default(0)
+  minStockAlert   Int?      // Alert when stock drops below
+  
+  // Categorization
+  categoryId      String
+  category        Category  @relation(fields: [categoryId], references: [id])
+  rarity          String    @default("common") // common, rare, epic, legendary
+  tags            String?   // JSON array of tags
+  
+  // Specifications
+  specs           String?   @db.Text // JSON: {label, value} pairs
+  levelRequirement Int?
+  classRequirement String?  // CSV: Warrior,Paladin,Archer
+  
+  // Media
+  mainImage       String    // URL to main image
+  galleryImages   String?   // JSON array of image URLs
+  
+  // Engagement & Stats
+  rating          Float     @default(0)
+  reviewCount     Int       @default(0)
+  views           Int       @default(0)
+  purchases       Int       @default(0)
+  
+  // Status
+  isActive        Boolean   @default(true)
+  isFeatured      Boolean   @default(false)
+  isOnSale        Boolean   @default(false)
+  isDraft         Boolean   @default(false)
+  
+  // Relations
+  reviews         Review[]
+  orderItems      OrderItem[]
+  wishlists       Wishlist[]
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([rarity])
+}
+
+// Category model - Item categories
+model Category {
+  id              String    @id @default(cuid())
+  name            String    @unique
+  slug            String    @unique
+  description     String?   @db.Text
+  image           String?   // Category icon/image URL
+  sortOrder       Int       @default(999)
+  isActive        Boolean   @default(true)
+  
+  // Relations
+  items           Item[]
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+// Review model - Item reviews and ratings
+model Review {
+  id              String    @id @default(cuid())
+  itemId          String
+  item            Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  author          String    // Username
+  authorEmail     String?
+  rating          Int       // 1-5
+  title           String?
+  content         String    @db.Text
+  imageUrl        String?   // Optional review image
+  
+  // Engagement
+  helpfulCount    Int       @default(0)
+  unhelpfulCount  Int       @default(0)
+  
+  // Status
+  isApproved      Boolean   @default(true)
+  isSpam          Boolean   @default(false)
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([itemId])
+  @@index([isApproved])
+}
+
+// Wishlist model - User favorite items
+model Wishlist {
+  id              String    @id @default(cuid())
+  itemId          String
+  item            Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  
+  userEmail       String    // Anonymous wishlist tracking
+  createdAt       DateTime  @default(now())
+  
+  @@unique([userEmail, itemId])
+}
+
+// Order & OrderItem models - Transaction tracking
+model Order {
+  id              String    @id @default(cuid())
+  orderNumber     String    @unique // ORD-2026001234
+  
+  // Customer
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  
+  // Items
+  items           OrderItem[]
+  
+  // Pricing
+  subtotal        Float
+  tax             Float     @default(0)
+  shipping        Float     @default(0)
+  discount        Float     @default(0)
+  total           Float
+  
+  // Status
+  status          String    @default("pending") // pending, paid, shipped, delivered, cancelled
+  paymentMethod   String?   // bank_transfer, e_wallet, credit_card
+  paymentStatus   String    @default("unpaid") // unpaid, paid, refunded
+  
+  // Delivery
+  shippingAddress String
+  shippingCity    String?
+  shippingCourier String?
+  trackingNumber  String?
+  
+  // Notes
+  customerNotes   String?   @db.Text
+  adminNotes      String?   @db.Text
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  paidAt          DateTime?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  
+  @@index([orderNumber])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id              String    @id @default(cuid())
+  orderId         String
+  order           Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  itemId          String    // Snapshot of item at purchase time
+  itemName        String
+  itemPrice       Float     // Price at time of purchase
+  quantity        Int
+  subtotal        Float     // quantity * itemPrice
+  
+  @@index([orderId])
+}
+
+// ============ LEGACY MODELS (To be deprecated) ============
+
+// Post model - DEPRECATED: migrate to Item
 model Post {
   id          String    @id @default(cuid())
   title       String
   excerpt     String?
   slug        String    @unique
-  content     String    // Markdown or HTML
-  categories  String    @default("")  // Comma-separated or JSON string
-  tags        String    @default("")  // Comma-separated or JSON string
+  content     String    @db.Text
+  categories  String    @default("")
+  tags        String    @default("")
   author      String    @default("Admin")
-  coverImage  String?   // URL to featured image
+  coverImage  String?
   published   Boolean   @default(false)
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   
-  // Relations
   comments    Comment[]
   views       Int       @default(0)
   
   @@index([slug])
   @@index([published])
-  @@index([publishedAt])
+  @@deprecated("Use Item model instead")
 }
 
-// Comment model - stores post comments
+// Comment model - DEPRECATED: migrate to Review
 model Comment {
   id        String   @id @default(cuid())
   postId    String
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   author    String
   email     String
-  content   String
+  content   String   @db.Text
   approved  Boolean  @default(false)
   isSpam    Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -50,60 +235,92 @@ model Comment {
   
   @@index([postId])
   @@index([approved])
-  @@index([isSpam])
+  @@deprecated("Use Review model for item ratings")
 }
 
-// Subscriber model - stores newsletter subscribers
+// Subscriber model - DEPRECATED: migrate to NotificationSubscriber
 model Subscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   verified  Boolean  @default(false)
   active    Boolean  @default(true)
-  mailchimpId String? // ID from Mailchimp
+  mailchimpId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   @@index([verified])
   @@index([active])
+  @@deprecated("Use NotificationSubscriber for store notifications")
 }
+
+// NotificationSubscriber model - For restock & order notifications
+model NotificationSubscriber {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  verified        Boolean   @default(false)
+  active          Boolean   @default(true)
+  
+  notifyRestocks  Boolean   @default(true)
+  notifyFlashSale Boolean   @default(true)
+  notifyNewItems  Boolean   @default(true)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([verified])
+  @@index([active])
+}
+
+// ============ UTILITY MODELS ============
 
 // Image model - tracks uploaded images
 model Image {
   id        String   @id @default(cuid())
   filename  String   @unique
   url       String
-  postId    String?  // If associated with a post
+  itemId    String?  // If associated with an item
   size      Int      // File size in bytes
-  width     Int?     // Image dimensions
+  width     Int?
   height    Int?
-  alt       String?  // Alt text for accessibility
+  alt       String?
   createdAt DateTime @default(now())
   
-  @@index([postId])
+  @@index([itemId])
 }
 
-// Draft model - auto-saved post drafts
+// Draft model - auto-saved drafts (for both posts and items)
 model Draft {
   id        String   @id @default(cuid())
+  type      String   @default("item") // "post" or "item"
   title     String
-  content   String   // Auto-saved content
-  slug      String   @unique
+  content   String   @db.Text
+  slug      String
+  metadata  String?  @db.Text // JSON: category, price, etc
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   @@index([slug])
+  @@index([type])
 }
 
 // Analytics model - track page views and events
 model Analytics {
-  id        String   @id @default(cuid())
-  postSlug  String?  // If post-specific
-  event     String   // 'pageview', 'search', 'comment', 'subscribe'
-  metadata  String?  // JSON metadata
-  createdAt DateTime @default(now())
+  id              String   @id @default(cuid())
+  event           String   // view, search, add_cart, review, purchase, wishlist
+  itemId          String?  // Associated item
+  itemName        String?
   
-  @@index([postSlug])
+  // Context
+  metadata        String?  @db.Text // JSON: search_query, filters, etc
+  userEmail       String?
+  ipAddress       String?
+  userAgent       String?
+  
+  createdAt       DateTime @default(now())
+  
   @@index([event])
+  @@index([itemId])
+  @@index([createdAt])
 }
 
 // Settings model - site configuration
